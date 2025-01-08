@@ -8,6 +8,7 @@ CSE-CIC-IDS2018 (Canadian Institute for Cybersecurity Intrusion Detection Datase
 CSE-CIC-IDS2018 được thiết kế để cung cấp một bộ dữ liệu toàn diện, tái hiện các kịch bản mạng thực tế bao gồm cả lưu lượng bình thường và các kiểu tấn công phổ biến. Mục tiêu là giúp các nhà nghiên cứu và nhà phát triển hệ thống phát hiện xâm nhập (IDS/IPS) thử nghiệm và đánh giá hiệu quả của các mô hình.
 
 **2. Cấu trúc bộ dữ liệu**
+
 Bộ dữ liệu bao gồm:
 
 Thời gian thu thập: 12-15/02/2018 và 19-23/02/2018.
@@ -19,6 +20,7 @@ Logs: Ghi nhận hoạt động mạng, hành vi của người dùng giả lậ
 Dataset CSV: Các file CSV chứa các đặc trưng được trích xuất (đặc trưng về giao thức, thống kê lưu lượng, thông tin về cổng và IP, v.v.).
 
 **3. Loại tấn công**
+
 Bộ dữ liệu bao gồm các loại tấn công phổ biến:
 
 Tấn công mạng:
@@ -33,6 +35,7 @@ Infiltration: Xâm nhập hệ thống từ bên trong.
 Malware và Backdoor.
 
 **4. Đặc trưng (Features)**
+
 Bộ dữ liệu có hơn 80 đặc trưng trích xuất từ lưu lượng mạng, bao gồm:
 
 Thống kê giao thức: Source IP, Destination IP, Source Port, Destination Port, Protocol.
@@ -42,6 +45,7 @@ Thống kê giao thức: Source IP, Destination IP, Source Port, Destination Por
 Thống kê tổng hợp: Average Packet Size, Packet Length Variance.
 
 **5. Ứng dụng**
+
 Bộ dữ liệu được sử dụng trong:
 
 Phát triển và đánh giá mô hình phát hiện xâm nhập.
@@ -55,8 +59,8 @@ Bao gồm cả lưu lượng mạng bình thường và lưu lượng mạng b�
 Có sẵn ở nhiều định dạng (PCAP, CSV), dễ dàng tích hợp vào các công cụ phân tích.
 
 **7. Nhược điểm**
-Dữ liệu lớn, đòi hỏi tài nguyên tính toán cao để xử lý.
-Có thể chứa các giá trị trùng lặp hoặc mất mát do cấu trúc phức tạp của dữ liệu.
+
+Dữ liệu lớn, đòi hỏi tài nguyên tính toán cao để xử lý. Có thể chứa các giá trị trùng lặp hoặc mất mát do cấu trúc phức tạp của dữ liệu.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Phát hiện xâm nhập sử dụng Machine Learning
 
