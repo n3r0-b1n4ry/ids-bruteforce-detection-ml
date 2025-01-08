@@ -57,3 +57,75 @@ Có sẵn ở nhiều định dạng (PCAP, CSV), dễ dàng tích hợp vào c�
 **7. Nhược điểm**
 Dữ liệu lớn, đòi hỏi tài nguyên tính toán cao để xử lý.
 Có thể chứa các giá trị trùng lặp hoặc mất mát do cấu trúc phức tạp của dữ liệu.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Phát hiện xâm nhập sử dụng Machine Learning
+
+Dự án này nhằm xây dựng một hệ thống phát hiện xâm nhập (IDS) sử dụng Machine Learning với Random Forest và các kỹ thuật xử lý dữ liệu tiên tiến. Dữ liệu được lấy từ tập IDS Intrusion 2018 và được xử lý, cân bằng lớp, huấn luyện và đánh giá.
+
+---
+
+## Chức năng chính
+
+- **Xử lý dữ liệu**: Làm sạch dữ liệu, chỉnh sửa kiểu dữ liệu, xử lý giá trị vô hạn và thiếu.
+- **Biến đổi nhãn**: Tối ưu hóa nhãn mục tiêu để phục vụ mô hình.
+- **Cân bằng lớp**: Sử dụng SMOTE để giải quyết vấn đề mất cân bằng dữ liệu.
+- **Huấn luyện mô hình**: Tối ưu hóa và huấn luyện mô hình Random Forest với Grid Search.
+- **Đánh giá**: Sinh báo cáo phân loại, ma trận nhầm lẫn và đường cong ROC.
+
+---
+
+## Cách sử dụng
+
+### 1. Yêu cầu hệ thống
+- Python >= 3.8
+- Các thư viện cần thiết: numpy, pandas, scikit-learn, matplotlib, imbalanced-learn, joblib
+
+Cài đặt các thư viện:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Chuẩn bị dữ liệu
+
+- Đảm bảo dữ liệu `ids_intrusion_14022018.csv` được đặt trong thư mục `dataset/`.
+
+### 3. Chạy mã
+
+Chạy tệp chính:
+
+```bash
+python main.py
+```
+
+### 4. Kết quả
+- **Mô hình huấn luyện**: Lưu dưới dạng `random_forest_model.pkl`.
+- **Biểu đồ ROC**: Lưu dưới dạng `random_forest_roc_curve.png`.
+
+---
+
+## Cấu trúc dự án
+
+```
+project-folder/
+|-- dataset/
+|   |-- ids_intrusion_14022018.csv
+|-- modules/
+|   |-- __init__.py
+|   |-- fixDataType.py
+|   |-- transformTargetLabel.py
+|-- main.py
+|-- requirements.txt
+|-- README.md
+```
+
+---
+
+## Đóng góp
+
+Nếu bạn muốn đóng góp vào dự án, hãy mở Pull Request hoặc tạo Issue trên repository GitHub này.
+
+---
+
+
+
