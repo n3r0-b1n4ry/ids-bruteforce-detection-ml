@@ -72,9 +72,13 @@ Dự án này nhằm xây dựng một hệ thống phát hiện xâm nhập (ID
 
 - **Xử lý dữ liệu**: Làm sạch dữ liệu, chỉnh sửa kiểu dữ liệu, xử lý giá trị vô hạn và thiếu.
 - **Biến đổi nhãn**: Tối ưu hóa nhãn mục tiêu để phục vụ mô hình.
-- **Cân bằng lớp**: Sử dụng SMOTE để giải quyết vấn đề mất cân bằng dữ liệu.
-- **Huấn luyện mô hình**: Tối ưu hóa và huấn luyện mô hình Random Forest với Grid Search.
-- **Đánh giá**: Sinh báo cáo phân loại, ma trận nhầm lẫn và đường cong ROC.
+- **Cân bằng lớp**: 
+    - Đối với mô hình Random Forest: Sử dụng SMOTE để giải quyết vấn đề mất cân bằng dữ liệu.
+    - Đối với mô hình Support Vector Machine (SVM): Sử dụng phương pháp Down Sampling các entry data có label "Benign" để cân bằng dữ liệu so với label "Malicious".
+- **Huấn luyện mô hình**:
+    - Tối ưu hóa và huấn luyện mô hình Random Forest với Grid Search.
+    - Support Vector Machine được cấu hình huấn luyện theo dạng LinearSVC với tham số C=10.
+- **Đánh giá**: Sinh báo cáo phân loại, Confusion Matrix và đường cong ROC.
 
 ---
 
@@ -116,8 +120,11 @@ python3 predict.py
 ```
 
 ### 4. Kết quả
-- **Mô hình huấn luyện**: Lưu dưới dạng `random_forest_model.pkl`.
+- **Mô hình huấn luyện**: Lưu dưới dạng `randomforest_model.pkl` và `svm_model.pkl`.
 - **Biểu đồ ROC**: Lưu dưới dạng `random_forest_roc_curve.png`.
+- **Confusion Matrix**:
+    - **Support Vector Machine**:
+        ![alt text](image/Confusion_Matrix.png)
 
 ---
 
