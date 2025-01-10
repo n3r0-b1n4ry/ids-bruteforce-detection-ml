@@ -133,8 +133,6 @@ python3 predict.py
 ```
 project-folder/
 ├── README.md
-├── create_test_data.py
-├── data_processing.py
 ├── dataset
 │   ├── cic-ids.csv
 │   ├── cic-ids_test.csv
@@ -148,7 +146,6 @@ project-folder/
 │   ├── randomforest_model.pkl
 │   └── svm_model.pkl
 ├── modules.py
-├── predict.py
 ├── report
 │   └── presentation
 └── requirements.txt
