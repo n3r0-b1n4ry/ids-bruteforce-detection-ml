@@ -92,14 +92,27 @@ pip install -r requirements.txt
 
 ### 2. Chuẩn bị dữ liệu
 
-- Đảm bảo dữ liệu `ids_intrusion_14022018.csv` được đặt trong thư mục `dataset/`.
+- Đảm bảo các tệp tin dữ liệu có định dạng tên kiểu `ids_intrusion_14022018.csv` được đặt trong thư mục `dataset/`.
+
+Chạy tệp tin thực hiện tiền xử lý dữ liệu:
+```bash
+python3 data_processing.py
+```
+
+- Sau đó, thu được tệp tin dữ liệu đã qua xử lý `cic-ids.csv` được đặt trong thư mục `dataset/`.
 
 ### 3. Chạy mã
 
-Chạy tệp chính:
+Chạy tệp thực hiện training model:
 
 ```bash
-python main.py
+python3 main.py
+```
+
+Load pre-trained model và thực hiện predict dựa trên tệp dữ liệu test:
+
+```bash
+python3 predict.py
 ```
 
 ### 4. Kết quả
@@ -112,15 +125,26 @@ python main.py
 
 ```
 project-folder/
-|-- dataset/
-|   |-- ids_intrusion_14022018.csv
-|-- modules/
-|   |-- __init__.py
-|   |-- fixDataType.py
-|   |-- transformTargetLabel.py
-|-- main.py
-|-- requirements.txt
-|-- README.md
+├── README.md
+├── create_test_data.py
+├── data_processing.py
+├── dataset
+│   ├── cic-ids.csv
+│   ├── cic-ids_test.csv
+│   ├── ids_intrusion_14022018.csv
+│   ├── ids_intrusion_15022018.csv
+│   ├── ids_intrusion_16022018.csv
+│   ├── ids_intrusion_21022018.csv
+│   └── ids_intrusion_22022018.csv
+├── main.py
+├── model
+│   ├── randomforest_model.pkl
+│   └── svm_model.pkl
+├── modules.py
+├── predict.py
+├── report
+│   └── presentation
+└── requirements.txt
 ```
 
 ---
