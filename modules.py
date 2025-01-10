@@ -1,14 +1,26 @@
+import sys
 from imblearn.under_sampling import RandomUnderSampler
+from imblearn.over_sampling import SMOTE
+import numpy as np
 import pandas as pd
 
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc
+
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import Normalizer
+
+from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_predict
 from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 # model classification
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
+from sklearn.svm import LinearSVC
 
 
 def fixDataType(dataset):
@@ -96,20 +108,67 @@ def fixDataType(dataset):
     
     return dataset
 
-def transformTargetLabel(dataset):
-    dataset['Label'] = dataset['Label'].apply(lambda x: "Benign" if x == 'Benign' else "Malicious")
+def dropInfinateNull(dataset):
+    # replace infinity value as null value
+    dataset = dataset.replace(["Infinity", "infinity"], np.inf)
+    dataset = dataset.replace([np.inf, -np.inf], np.nan)
+
+    # drop all null values
+    dataset.dropna(inplace=True)
     return dataset
 
-def downsampling_benign(dataset):
+def transformTargetLabel(dataset):
+    dataset['Label'] = dataset['Label'].apply(lambda x: 0 if x == 'Benign' else 1)
+    return dataset
+
+def dropColumns(dataset):
+    dataset.drop(columns="Timestamp", inplace=True)
+    dataset.drop(columns="Bwd PSH Flags", inplace=True)
+    dataset.drop(columns="Fwd URG Flags", inplace=True)
+    dataset.drop(columns="Bwd URG Flags", inplace=True)
+    dataset.drop(columns="Fwd Byts/b Avg", inplace=True)
+    dataset.drop(columns="Fwd Pkts/b Avg", inplace=True)
+    dataset.drop(columns="Fwd Blk Rate Avg", inplace=True)
+    dataset.drop(columns="Bwd Byts/b Avg", inplace=True)
+    dataset.drop(columns="Bwd Pkts/b Avg", inplace=True)
+    dataset.drop(columns="Bwd Blk Rate Avg", inplace=True)
+    corr = dataset.corr(numeric_only=True)
+    correlated_col = set()
+    is_correlated = [True] * len(corr.columns)
+    threshold = 0.90
+    for i in range (len(corr.columns)):
+        if(is_correlated[i]):
+            for j in range(i):
+                if (corr.iloc[i, j] >= threshold) and (is_correlated[j]):
+                    colname = corr.columns[j]
+                    is_correlated[j]=False
+                    correlated_col.add(colname)
+    dataset.drop(correlated_col, axis=1, inplace=True)
+    return dataset
+
+def balanceData(dataset):
     # split data into features and target
     x=dataset.drop(["Label"], axis=1)
     y=dataset["Label"]
 
-    # applying downsampling
+    # # applying downsampling
     rus = RandomUnderSampler()
     x_balanced, y_balanced = rus.fit_resample(x, y)
 
+    # # applying SMOTE
+    # smote = SMOTE(random_state=42)
+    # x_balanced, y_balanced = smote.fit_resample(x, y)
+
     dataset = pd.concat([x_balanced, y_balanced], axis=1)
+
+    return dataset
+
+def normalizeData(dataset):
+    numeric_cols = dataset.select_dtypes(include=[np.number]).columns.tolist()
+    
+    # Apply Z-Score Normalization
+    scaler = StandardScaler()
+    dataset[numeric_cols] = scaler.fit_transform(dataset[numeric_cols])
 
     return dataset
 
@@ -117,23 +176,16 @@ def randomforest(dataset):
     # split data
     x=dataset.drop(["Label"], axis=1)
     y=dataset["Label"]
-    # K-fold
-    kf = KFold(n_splits=10, shuffle=True, random_state=42)
+
+    # split the data for evaluation
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state =42, shuffle=True)
+
+    # # K-fold
+    # kf = KFold(n_splits=10, shuffle=True, random_state=42)
 
     # create a Random Forest model
-    rf = RandomForestClassifier()
-
-    # predict
-    y_pred = cross_val_predict(rf, x, y, cv=kf)
-
-    # # generate report
-    # cm=confusion_matrix(y, y_pred)
-    # cr=classification_report(y, y_pred)
-
-    # print("Confusion Matrix:")
-    # print(cm)
-    # print("Performance Matrix:")
-    # print(cr)
+    rf = RandomForestClassifier(max_features='sqrt', max_depth=10, random_state=42)
+    rf.fit(x_train, y_train)
 
     return rf
 
@@ -141,21 +193,15 @@ def supportvectorclassifier(dataset):
     # split data
     x=dataset.drop(["Label"], axis=1)
     y=dataset["Label"]
-    # K-fold
-    kf = KFold(n_splits=10, shuffle=True, random_state=42)
 
     # create a SVC model
-    svc = SVC()
-
-    # predict
-    y_pred = cross_val_predict(svc, x, y, cv=kf)
-
-    print ("Support Vector Classifier")
-    # generate report
-    print("Confusion Matrix:")
-    print(confusion_matrix(y, y_pred))
-
-    print("Performance Matrix:")
-    print(classification_report(y, y_pred))
+    svc = LinearSVC(C=10, dual=False)
+    svc.fit(x, y)
 
     return svc
+
+def cm_display(y, y_pred):
+    cm = confusion_matrix(y, y_pred)
+    print(cm)
+    cm_display = ConfusionMatrixDisplay(cm).plot()
+    plt.show()
